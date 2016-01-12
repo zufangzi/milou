@@ -1,0 +1,4 @@
+# Extra TestExecutionListeners for dd-milou ut Framework
+#
+org.springframework.test.context.TestExecutionListener = \
+	com.dingding.milou.dbunit.MilouDbUnitTestExecutionListener
