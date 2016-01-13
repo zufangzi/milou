@@ -55,6 +55,7 @@ public class MilouDataSetLoader implements DataSetLoader {
     /**
      * 根据注解@DatabaseSetup 或者@DatabaseTearDown的属性value值，进行xml文件、sql文件、数据库表的操作
      */
+    @Override
     public IDataSet loadDataSet(Class<?> testClass, String location) throws Exception {
         if (isXMLFile(location)) {
             return doWithXMLFile(testClass, location);
