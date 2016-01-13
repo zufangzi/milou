@@ -9,11 +9,13 @@
 	<modules>
 		<module>milou-db</module>
 		<module>milou-stub</module>
+		<module>milou-assert</module>
 	</modules>
 
 	<properties>
 		<milou.db.version>1.0.0-SNAPSHOT</milou.db.version>
 		<milou.stub.version>1.0.0-SNAPSHOT</milou.stub.version>
+		<milou.assert.version>1.0.0-SNAPSHOT</milou.assert.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<spring.version>4.1.6.RELEASE</spring.version>
 	</properties>

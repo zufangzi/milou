@@ -15,5 +15,10 @@
 		<artifactId>milou-db</artifactId>
 		<version>${milou.db.version}</version>
 	</dependency>
+	<dependency>
+		<groupId>com.dingding</groupId>
+		<artifactId>milou-assert</artifactId>
+		<version>${milou.assert.version}</version>
+	</dependency>
   </dependencies>
 </project>
