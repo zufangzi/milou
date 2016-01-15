@@ -64,9 +64,9 @@ public class MilouSpringJunitRunner extends SpringJUnit4ClassRunner {
         List<FrameworkMethod> DBSituations = testClass.getAnnotatedMethods(DBSituations.class);
         List<FrameworkMethod> DBSetupSituation = testClass.getAnnotatedMethods(DBSetupSituation.class);
         List<FrameworkMethod> DBTeardownSituation = testClass.getAnnotatedMethods(DBTeardownSituation.class);
-        if (CollectionUtils.isEmpty(DBSituations) && CollectionUtils.isEmpty(DBSetupSituation)
-                && CollectionUtils.isEmpty(DBTeardownSituation)) {
-            MilouDbUnitTestExecutionListener.executeListenerOrNot = false;
+        if (!CollectionUtils.isEmpty(DBSituations) || !CollectionUtils.isEmpty(DBSetupSituation)
+                || !CollectionUtils.isEmpty(DBTeardownSituation)) {
+            MilouDbUnitTestExecutionListener.executeListenerOrNot = true;
         }
     }
 

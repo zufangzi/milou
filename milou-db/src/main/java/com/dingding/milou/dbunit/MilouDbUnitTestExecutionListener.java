@@ -55,8 +55,8 @@ public class MilouDbUnitTestExecutionListener extends AbstractTestExecutionListe
             DbUnitTestExecutionListener.class, "databseOperationLookup");
 
     private boolean hasMirrorData = false;
-    // 默认是执行此Listener
-    public static boolean executeListenerOrNot = true;
+    // 默认是不执行此Listener
+    public static boolean executeListenerOrNot = false;
 
     private static MilouDBUnitRunner runner = new MilouDBUnitRunner();
 

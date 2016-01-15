@@ -6,12 +6,12 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.DefaultDataSet;
 import org.dbunit.dataset.IDataSet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
@@ -34,7 +34,7 @@ import com.github.springtestdbunit.dataset.FlatXmlDataSetLoader;
 @Component("dbUnitDataSetLoader")
 public class MilouDataSetLoader implements DataSetLoader {
 
-    private static final Log logger = LogFactory.getLog(MilouDataSetLoader.class);
+    private static final Logger logger = LoggerFactory.getLogger(MilouDataSetLoader.class);
 
     private final static String XML_FILE = ".xml";
 
@@ -66,7 +66,7 @@ public class MilouDataSetLoader implements DataSetLoader {
         if (isTable(location)) {
             return doWithTable(testClass, location);
         }
-        throw new RuntimeException("no such xml or sql or table named " + location);
+        throw new Exception("no such xml or sql or table named " + location);
     }
 
     /**
@@ -114,7 +114,7 @@ public class MilouDataSetLoader implements DataSetLoader {
      * @throws DataSetException
      */
     private IDataSet doWithTable(Class<?> testClass, String tablename) throws DataSetException {
-        logger.info("表【" + tablename + "】数据还原！");
+        logger.info("表[{}]数据还原！", tablename);
         return bufferMap.get(tablename);
     }
 
