@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import junit.runner.Version;
+
 import org.junit.Test;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
@@ -37,22 +39,34 @@ public class MilouSpringJunitRunner extends SpringJUnit4ClassRunner {
 
     public MilouSpringJunitRunner(Class<?> clazz) throws InitializationError {
         super(clazz);
+        String version = Version.id();
+        // 在其他工程下添加的junit的依赖可能不是4.12，因此会绕过createTestClass()方法，打补丁
+        if (!"4.12".equals(version)) {
+            TestClass testClassWrapper = super.getTestClass();
+            doWithMilouAnnotation(testClassWrapper);
+        }
+    }
+
+    /**
+     * 4.12版本特有方法
+     */
+    @Override
+    protected TestClass createTestClass(Class<?> testClass) {
+        TestClass testClassWrapper = super.createTestClass(testClass);
+        doWithMilouAnnotation(testClassWrapper);
+        return testClassWrapper;
     }
 
     /**
      * 添加@Situations、@Situation和@StubLocation注解的扫描
      */
-    @Override
-    protected TestClass createTestClass(Class<?> testClass) {
-        TestClass testClassWrapper = super.createTestClass(testClass);
+    protected void doWithMilouAnnotation(TestClass testClassWrapper) {
         // 获取test方法-场景信息的map
         setAllSituationIntoMap(testClassWrapper);
         // stubInfo仓库初始化
         stubInfoRepoInit(testClassWrapper);
         // 是否需要MilouDBUnitExecutionListener
         switchMilouDBUnitTestExecutionListener(testClassWrapper);
-
-        return testClassWrapper;
     }
 
     /**
@@ -137,7 +151,7 @@ public class MilouSpringJunitRunner extends SpringJUnit4ClassRunner {
                 StubInfoRepo.setIntoStubInfoRepo(stubId, info);
             }
         }
-        StubLocation locationAnno = testClass.getAnnotation(StubLocation.class);
+        StubLocation locationAnno = testClass.getJavaClass().getAnnotation(StubLocation.class);
         if (locationAnno != null && !locationAnno.value().equals(StubLocation.LOCAL)) {
             // 根据注解加载指定路径下的stub仓库
             List<Class<?>> scanList = PackageScanner.getStubClass(locationAnno.value());

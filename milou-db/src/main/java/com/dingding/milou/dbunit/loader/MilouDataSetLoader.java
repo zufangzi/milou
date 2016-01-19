@@ -16,7 +16,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.jdbc.datasource.init.ScriptUtils;
-import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import com.dingding.milou.dbunit.DatabaseConnections;
@@ -31,7 +30,6 @@ import com.github.springtestdbunit.dataset.FlatXmlDataSetLoader;
  * @author al
  * 
  */
-@Component("dbUnitDataSetLoader")
 public class MilouDataSetLoader implements DataSetLoader {
 
     private static final Logger logger = LoggerFactory.getLogger(MilouDataSetLoader.class);

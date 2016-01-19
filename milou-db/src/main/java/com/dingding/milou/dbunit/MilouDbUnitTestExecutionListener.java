@@ -147,6 +147,7 @@ public class MilouDbUnitTestExecutionListener extends AbstractTestExecutionListe
             if (!StringUtils.isEmpty(commonBeanName)) {
                 list.add(commonBeanName);
             }
+            // other dataSource
             String[] dataSourceNotDBUnit = testContext.getApplicationContext().getBeanNamesForType(DataSource.class);
             if (!ObjectUtils.isEmpty(dataSourceNotDBUnit)) {
                 list.addAll(Arrays.asList(dataSourceNotDBUnit));
@@ -178,9 +179,12 @@ public class MilouDbUnitTestExecutionListener extends AbstractTestExecutionListe
                 return beanName;
             }
         }
-        throw new IllegalStateException(
-                "Unable to find a DB Unit database connection, missing one the following beans: "
-                        + Arrays.asList(COMMON_DATABASE_CONNECTION_BEAN_NAMES));
+        if (logger.isDebugEnabled()) {
+            logger.debug(
+                    "Unable to find a DB Unit database connection, missing one the following beans: "
+                            + Arrays.asList(COMMON_DATABASE_CONNECTION_BEAN_NAMES));
+        }
+        return null;
     }
 
     private void prepareDatabaseConnection(DbUnitTestContextAdapter testContext, String[] connectionBeanNames)
