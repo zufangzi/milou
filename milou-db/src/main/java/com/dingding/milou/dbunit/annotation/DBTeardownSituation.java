@@ -17,7 +17,7 @@ public @interface DBTeardownSituation {
      * 
      * @return connection 数据源连接
      */
-    String connection() default "";
+    String connection() default "dbUnitDatabaseConnection";
 
     /**
      * 1、value可以是"xxx",xxx是测试方法执行完需要还原的数据库的表名，多个表名，用逗号分隔; 2、value可以是"xxx.xml",原有的DBUnit采用xml形式储存数据，此情况是为了保留底层的框架功能。

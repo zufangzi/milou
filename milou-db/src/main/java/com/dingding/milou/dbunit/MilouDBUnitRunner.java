@@ -20,6 +20,7 @@ import com.dingding.milou.dbunit.annotation.DBSetupSituation;
 import com.dingding.milou.dbunit.annotation.DBSituations;
 import com.dingding.milou.dbunit.annotation.DBTeardownSituation;
 import com.dingding.milou.dbunit.loader.MilouDataSetLoader;
+import com.dingding.milou.dbunit.util.CollectionUtils;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
@@ -160,7 +161,7 @@ public class MilouDBUnitRunner {
             List<IDataSet> datasets = loadDataSets(testContext, annotation);
             DatabaseOperation operation = annotation.getType();
             org.dbunit.operation.DatabaseOperation dbUnitOperation = getDbUnitDatabaseOperation(testContext, operation);
-            if (!datasets.isEmpty()) {
+            if (!CollectionUtils.isEmpty(datasets)) {
                 if (logger.isDebugEnabled()) {
                     logger.debug("Executing " + (isSetup ? "Setup" : "Teardown") + " of @DatabaseTest using "
                             + operation + " on " + datasets.toString());
@@ -195,8 +196,9 @@ public class MilouDBUnitRunner {
         if (StringUtils.hasLength(dataSetLocation)) {
             IDataSet dataSet = dataSetLoader.loadDataSet(testContext.getTestClass(), dataSetLocation);
             dataSet = modifier.modify(dataSet);
-            Assert.notNull(dataSet,
-                    "Unable to load dataset from \"" + dataSetLocation + "\" using " + dataSetLoader.getClass());
+            if (logger.isWarnEnabled()) {
+                logger.warn("Unable to load dataset from \"" + dataSetLocation + "\" using " + dataSetLoader.getClass());
+            }
             return dataSet;
         }
         return null;

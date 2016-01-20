@@ -8,7 +8,6 @@ import java.util.Map;
 
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.DataSetException;
-import org.dbunit.dataset.DefaultDataSet;
 import org.dbunit.dataset.IDataSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -88,7 +87,7 @@ public class MilouDataSetLoader implements DataSetLoader {
             ScriptUtils.executeSqlScript(connection, res);
         }
         // return some not important just avoid throwing exception
-        return new DefaultDataSet();
+        return null;
     }
 
     /**

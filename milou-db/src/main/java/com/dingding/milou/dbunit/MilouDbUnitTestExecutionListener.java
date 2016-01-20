@@ -22,6 +22,9 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 
+import com.dingding.milou.dbunit.annotation.DBSetupSituation;
+import com.dingding.milou.dbunit.annotation.DBSituations;
+import com.dingding.milou.dbunit.annotation.DBTeardownSituation;
 import com.dingding.milou.dbunit.loader.MilouDataSetLoader;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DbUnitConfiguration;
@@ -55,19 +58,30 @@ public class MilouDbUnitTestExecutionListener extends AbstractTestExecutionListe
             DbUnitTestExecutionListener.class, "databseOperationLookup");
 
     private boolean hasMirrorData = false;
-    // 默认是不执行此Listener
-    public static boolean executeListenerOrNot = false;
 
     private static MilouDBUnitRunner runner = new MilouDBUnitRunner();
 
     private DbUnitTestContextAdapter contextAdapter = null;
 
+    /**
+     * 判断是否需要listener
+     * 
+     * @param testContext
+     * @return
+     */
+    private boolean needMilouDBListener(TestContext testContext) {
+        Method testMethod = testContext.getTestMethod();
+        DBSituations situations = testMethod.getAnnotation(DBSituations.class);
+        DBSetupSituation setupSituation = testMethod.getAnnotation(DBSetupSituation.class);
+        DBTeardownSituation teardownSituation = testMethod.getAnnotation(DBTeardownSituation.class);
+        if (situations == null && setupSituation == null && teardownSituation == null) {
+            return false;
+        }
+        return true;
+    }
+
     @Override
     public void prepareTestInstance(TestContext testContext) throws Exception {
-        // 判断是否需要此listener
-        if (!executeListenerOrNot) {
-            return;
-        }
         if (contextAdapter == null) {
             contextAdapter = new DbUnitTestContextAdapter(testContext);
         }
@@ -146,11 +160,13 @@ public class MilouDbUnitTestExecutionListener extends AbstractTestExecutionListe
             String commonBeanName = getDatabaseConnectionUsingCommonBeanNames(testContext);
             if (!StringUtils.isEmpty(commonBeanName)) {
                 list.add(commonBeanName);
-            }
-            // other dataSource
-            String[] dataSourceNotDBUnit = testContext.getApplicationContext().getBeanNamesForType(DataSource.class);
-            if (!ObjectUtils.isEmpty(dataSourceNotDBUnit)) {
-                list.addAll(Arrays.asList(dataSourceNotDBUnit));
+            } else {
+                // other dataSource
+                String[] dataSourceNotDBUnit =
+                        testContext.getApplicationContext().getBeanNamesForType(DataSource.class);
+                if (!ObjectUtils.isEmpty(dataSourceNotDBUnit)) {
+                    list.addAll(Arrays.asList(dataSourceNotDBUnit));
+                }
             }
             databaseConnectionBeanNames = list.toArray(new String[list.size()]);
         }
@@ -229,8 +245,7 @@ public class MilouDbUnitTestExecutionListener extends AbstractTestExecutionListe
 
     @Override
     public void beforeTestMethod(TestContext testContext) throws Exception {
-        // 判断是否需要此listener
-        if (!executeListenerOrNot) {
+        if (!needMilouDBListener(testContext)) {
             return;
         }
         runner.beforeTestMethod(new DbUnitTestContextAdapter(testContext));
@@ -238,8 +253,7 @@ public class MilouDbUnitTestExecutionListener extends AbstractTestExecutionListe
 
     @Override
     public void afterTestMethod(TestContext testContext) throws Exception {
-        // 判断是否需要此listener
-        if (!executeListenerOrNot) {
+        if (!needMilouDBListener(testContext)) {
             return;
         }
         runner.afterTestMethod(new DbUnitTestContextAdapter(testContext));

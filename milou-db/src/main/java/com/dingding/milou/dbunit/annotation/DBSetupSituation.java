@@ -17,7 +17,7 @@ public @interface DBSetupSituation {
      * 
      * @return connection 数据源连接
      */
-    String connection() default "";
+    String connection() default "dbUnitDatabaseConnection";
 
     /**
      * 
