@@ -83,7 +83,7 @@
 			<dependency>
 				<groupId>org.dbunit</groupId>
 				<artifactId>dbunit</artifactId>
-				<version>2.5.1</version>
+				<version>2.5.2-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>com.github.springtestdbunit</groupId>
@@ -211,7 +211,7 @@
 			</plugins>
 		</pluginManagement>
 	</build>
-
+	
 	<distributionManagement>
 		<repository>
 			<id>releases</id>
@@ -235,4 +235,5 @@
 			<url>http://192.168.1.210:8088/nexus/content/groups/dingding/</url>
 		</pluginRepository>
 	</pluginRepositories>
+	 
 </project>

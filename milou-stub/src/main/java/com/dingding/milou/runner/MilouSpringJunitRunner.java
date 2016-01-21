@@ -15,6 +15,10 @@ import org.junit.runners.model.TestClass;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.util.CollectionUtils;
 
+import com.dingding.milou.dbunit.annotation.DBSetupSituation;
+import com.dingding.milou.dbunit.annotation.DBSituations;
+import com.dingding.milou.dbunit.annotation.DBTeardownSituation;
+import com.dingding.milou.dbunit.threadLocal.MilouDBThreadLocal;
 import com.dingding.milou.proxy.MockAutoProxyCreator;
 import com.dingding.milou.repo.StubInfoRepo;
 import com.dingding.milou.scanner.PackageScanner;
@@ -62,6 +66,22 @@ public class MilouSpringJunitRunner extends SpringJUnit4ClassRunner {
         // stubInfo仓库初始化
         stubInfoRepoInit(testClassWrapper);
         // 是否需要MilouDBUnitExecutionListener
+        switchMilouDBUnitTestExecutionListener(testClassWrapper);
+    }
+
+    /**
+     * 判断是否需要执行MilouDbUnitTestExecutionListener
+     * 
+     * @param testClass
+     */
+    private void switchMilouDBUnitTestExecutionListener(TestClass testClass) {
+        List<FrameworkMethod> DBSituations = testClass.getAnnotatedMethods(DBSituations.class);
+        List<FrameworkMethod> DBSetupSituation = testClass.getAnnotatedMethods(DBSetupSituation.class);
+        List<FrameworkMethod> DBTeardownSituation = testClass.getAnnotatedMethods(DBTeardownSituation.class);
+        if (!CollectionUtils.isEmpty(DBSituations) || !CollectionUtils.isEmpty(DBSetupSituation)
+                || !CollectionUtils.isEmpty(DBTeardownSituation)) {
+            MilouDBThreadLocal.setMilouDBListener(Boolean.valueOf(true));
+        }
     }
 
     private void setAllSituationIntoMap(TestClass testClass) {

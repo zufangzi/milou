@@ -26,6 +26,7 @@ import com.dingding.milou.dbunit.annotation.DBSetupSituation;
 import com.dingding.milou.dbunit.annotation.DBSituations;
 import com.dingding.milou.dbunit.annotation.DBTeardownSituation;
 import com.dingding.milou.dbunit.loader.MilouDataSetLoader;
+import com.dingding.milou.dbunit.threadLocal.MilouDBThreadLocal;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DbUnitConfiguration;
 import com.github.springtestdbunit.bean.DatabaseDataSourceConnectionFactoryBean;
@@ -64,7 +65,7 @@ public class MilouDbUnitTestExecutionListener extends AbstractTestExecutionListe
     private DbUnitTestContextAdapter contextAdapter = null;
 
     /**
-     * 判断是否需要listener
+     * 每个测试方法执行前判断是否需要listener
      * 
      * @param testContext
      * @return
@@ -82,6 +83,9 @@ public class MilouDbUnitTestExecutionListener extends AbstractTestExecutionListe
 
     @Override
     public void prepareTestInstance(TestContext testContext) throws Exception {
+        if (!MilouDBThreadLocal.getMilouDBListener()) {
+            return;
+        }
         if (contextAdapter == null) {
             contextAdapter = new DbUnitTestContextAdapter(testContext);
         }
@@ -112,7 +116,7 @@ public class MilouDbUnitTestExecutionListener extends AbstractTestExecutionListe
                 }
             }
         } catch (Exception e) {
-            throw new RuntimeException("获取表名失败", e.getCause());
+            throw new RuntimeException("mirror database build error", e);
         } finally {
 
         }
@@ -245,6 +249,9 @@ public class MilouDbUnitTestExecutionListener extends AbstractTestExecutionListe
 
     @Override
     public void beforeTestMethod(TestContext testContext) throws Exception {
+        if (!MilouDBThreadLocal.getMilouDBListener()) {
+            return;
+        }
         if (!needMilouDBListener(testContext)) {
             return;
         }
@@ -253,6 +260,9 @@ public class MilouDbUnitTestExecutionListener extends AbstractTestExecutionListe
 
     @Override
     public void afterTestMethod(TestContext testContext) throws Exception {
+        if (!MilouDBThreadLocal.getMilouDBListener()) {
+            return;
+        }
         if (!needMilouDBListener(testContext)) {
             return;
         }
