@@ -195,9 +195,12 @@ public class MilouDBUnitRunner {
 
         if (StringUtils.hasLength(dataSetLocation)) {
             IDataSet dataSet = dataSetLoader.loadDataSet(testContext.getTestClass(), dataSetLocation);
-            dataSet = modifier.modify(dataSet);
-            if (logger.isWarnEnabled()) {
-                logger.warn("Unable to load dataset from \"" + dataSetLocation + "\" using " + dataSetLoader.getClass());
+            if (dataSet != null) {
+                dataSet = modifier.modify(dataSet);
+                if (logger.isWarnEnabled()) {
+                    logger.warn("Unable to load dataset from \"" + dataSetLocation + "\" using "
+                            + dataSetLoader.getClass());
+                }
             }
             return dataSet;
         }
