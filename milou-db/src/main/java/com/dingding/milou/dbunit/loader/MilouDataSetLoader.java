@@ -86,7 +86,7 @@ public class MilouDataSetLoader implements DataSetLoader {
         for (Resource res : resources) {
             ScriptUtils.executeSqlScript(connection, res);
         }
-        // return some not important just avoid throwing exception
+        logger.info("sql file 【{}】 execute success!", sqlFile);
         return null;
     }
 
