@@ -5,9 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import junit.runner.Version;
-
 import org.junit.Test;
+import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.Statement;
@@ -26,6 +25,7 @@ import com.dingding.milou.scanner.StubInfoScanner;
 import com.dingding.milou.situation.Situation;
 import com.dingding.milou.situation.SituationInfo;
 import com.dingding.milou.situation.Situations;
+import com.dingding.milou.statement.ClearStatement;
 import com.dingding.milou.statement.RunSituations;
 import com.dingding.milou.stub.Stub;
 import com.dingding.milou.stub.StubInfo;
@@ -34,27 +34,13 @@ import com.dingding.milou.stub.StubLocation;
 public class MilouSpringJunitRunner extends SpringJUnit4ClassRunner {
 
     // 根据Method 确定其场景信息
-    private static Map<FrameworkMethod, List<SituationInfo>> situationInfos =
+    private Map<FrameworkMethod, List<SituationInfo>> situationInfos =
             new HashMap<FrameworkMethod, List<SituationInfo>>();
 
     public MilouSpringJunitRunner(Class<?> clazz) throws InitializationError {
         super(clazz);
-        String version = Version.id();
-        // 在其他工程下添加的junit的依赖可能不是4.12，因此会绕过createTestClass()方法，打补丁
-        if (!"4.12".equals(version)) {
-            TestClass testClassWrapper = super.getTestClass();
-            doWithMilouAnnotation(testClassWrapper);
-        }
-    }
-
-    /**
-     * 4.12版本特有方法
-     */
-    @Override
-    protected TestClass createTestClass(Class<?> testClass) {
-        TestClass testClassWrapper = super.createTestClass(testClass);
+        TestClass testClassWrapper = super.getTestClass();
         doWithMilouAnnotation(testClassWrapper);
-        return testClassWrapper;
     }
 
     /**
@@ -171,14 +157,9 @@ public class MilouSpringJunitRunner extends SpringJUnit4ClassRunner {
     }
 
     @Override
-    protected Statement withAfterClasses(Statement statement) {
-        Statement last = super.withBeforeClasses(statement);
-        // 全局变量清理
-        // StubInfoRepo.clearStubIdMap();
-        // StubInfoRepo.clearStubInfoRepo();
-        // StubObjectRepo.clear();
-        // situationInfos.clear();
-        return last;
+    protected Statement classBlock(RunNotifier notifier) {
+        Statement statement = super.classBlock(notifier);
+        return new ClearStatement(statement);
     }
 
 }
