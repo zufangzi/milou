@@ -9,7 +9,6 @@
 	</parent>
 
 	<artifactId>milou-db</artifactId>
-	<version>${milou.db.version}</version>
 	
 	<dependencies>
 		<dependency>

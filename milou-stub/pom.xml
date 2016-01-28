@@ -8,7 +8,6 @@
 	</parent>
 
 	<artifactId>milou-stub</artifactId>
-	<version>${milou.stub.version}</version>
 
 	<dependencies>
 		<dependency>

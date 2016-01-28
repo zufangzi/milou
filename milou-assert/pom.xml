@@ -9,7 +9,6 @@
 	</parent>
 
 	<artifactId>milou-assert</artifactId>
-	<version>${milou.assert.version}</version>
 
 	<dependencies>
 		<dependency>

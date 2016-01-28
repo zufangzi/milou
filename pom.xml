@@ -20,6 +20,8 @@
 		<spring.version>4.1.6.RELEASE</spring.version>
 		<junit.version>4.12</junit.version>
 		<powermock.version>1.4.10</powermock.version>
+		<maven.compiler.plugin.version>3.3</maven.compiler.plugin.version>
+		<maven.surefire.plugin.version>2.19</maven.surefire.plugin.version>
 	</properties>
 
 	<dependencyManagement>
@@ -104,6 +106,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
+				<version>${maven.surefire.plugin.version}</version>
 				<configuration>
 					<forkMode>once</forkMode>
 					<argLine>-Dfile.encoding=UTF-8</argLine>
@@ -130,6 +133,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven.compiler.plugin.version}</version>
 				<configuration>
 					<source>1.7</source>
 					<target>1.7</target>
