@@ -4,10 +4,12 @@
 - 单元测试要求有很强的独立性，不论测试环境还是测试case的方法执行顺序怎样变化，都要保证测试结果的一致性。纯粹的单测要求对环境对依赖有很强的隔离性。
 - 针对外部api的依赖，采用基于Spring对依赖进行mock的处理，mock切面会根据场景注解路由到开发人员已经写好的桩方法上，避免外部依赖的真正执行。桩方法可以做成动态，根据入参返回不同结果，可以实现桩数据复用。
 - 针对外部数据库的依赖，采用Spring+H2+DBUnit数据库。同时利用注解@DBSituations实现测试方法执行前后的数据库的数据清理。避免case之间出现执行顺序的耦合。
+
 ##Modules
 - milou-stub 通过注解@Situation实现基于Spring的单元测试中桩数据的路由的功能
 - milou-db 通过注解@DBSituations实现基于DBUnit的单元测试中各个案例之间对数据库依赖的数据隔离的功能
 - milou-assert 提供一些更加丰富的断言工具方法
+
 ##QUICKSTART
 以下将通过一个常见的使用case来简单说明如何使用Milou框架，在Milou的单测中有该示例
 1. **添加pom依赖**
@@ -226,6 +228,7 @@ public class StaffDaoTest {
                 list.size() == 8);
     }
 ```
+
 ##使用规范
 桩的写法规范
 1. 桩所在的类名：com.dingding.{module}.stub.**.{被替换的类名称}Stub
@@ -235,8 +238,10 @@ module是业务模块名称；**表示可以存在子级多层目录；
 3. @Stub的value值，即stubId：{类的简单名称}_{被mock的方法名称}_{是否带有参数}_{模拟的状态}_{**}
 是否带有参数：noArgs--可以没有参数、anyArgs--有参数，可以任意、withArgs--有参数，有具体要求，具体参数因为数据结构复杂，宜在注释中说明。 
 模拟状态：normal–正常 exception–异常等，如描述不够清晰，可以添加"_"进一步描述状态，目的是表明用途，降低代码维护和别人复用的难度。
+
 ##Contact Us
 inf@zufangit.cn
+
 ##Changelog
 **v0.1 —— 2016-02-28**
 + 实现单测桩数据复用；
