@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://www.springframework.org/schema/jdbc
+        http://www.springframework.org/schema/jdbc/spring-jdbc-4.0.xsd
+	">
+	<!-- H2 dataSource -->
+	<bean id="dataSource" class="org.h2.jdbcx.JdbcDataSource">
+		<property name="url" value="jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;MODE=MYSQL;IGNORECASE=TRUE;" />
+		<property name="user" value="sa" />
+		<property name="password" value="" />
+	</bean>
+	<!-- dataSource init -->
+	<jdbc:initialize-database data-source="dataSource">
+		<jdbc:script encoding="utf-8"
+			location="classpath:database/virtual_db-schema.sql" />
+		<jdbc:script encoding="utf-8"
+			location="classpath:database/virtual_db-data.sql" /> 
+	</jdbc:initialize-database>
+
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:META-INF/spring/domain/mybatis-config.xml" />
+	</bean>
+	
+	<!-- 配置dbUnit框架的特有的数据库连接，注入属性，dataSource是实际的H2数据源， databaseConfig是H2数据库连接的配置信息-->
+    <bean id="dbUnitDatabaseConnection"
+        class="com.dingding.milou.dbunit.bean.DatabaseDataSourceConnectionFactoryBean">
+        <property name="databaseConfig" ref="dbUnitDatabaseConfig" />
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+     
+    <!-- 数据库连接配置信息，注入H2数据类型工厂，如果不注入，本人在做demo的时候报warning 数据类型有不兼容 -->
+    <bean id="dbUnitDatabaseConfig" class="com.dingding.milou.dbunit.bean.DatabaseConfigBean">
+        <property name="datatypeFactory" ref="h2DataTypeFactory" />
+        <property name="allowEmptyFields" value="true" />
+    </bean>
+     
+    <!-- datatype config for H2 type compatible-->
+    <bean id="h2DataTypeFactory" class="org.dbunit.ext.h2.H2DataTypeFactory" />
+    <!--dbUnitDataSetLoader -->
+    <bean id="dbUnitDataSetLoader" class="com.dingding.milou.dbunit.loader.MilouDataSetLoader" />
+</beans>
