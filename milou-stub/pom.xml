@@ -21,4 +21,5 @@
 			<version>${milou.assert.version}</version>
 		</dependency>
 	</dependencies>
+	
 </project>

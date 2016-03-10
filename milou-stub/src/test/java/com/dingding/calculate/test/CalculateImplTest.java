@@ -44,42 +44,42 @@ public class CalculateImplTest extends StubRepo {
         Assert.assertEquals(subActual, expect2);
     }
 
-    /**
-     * 测试case2
-     */
-    @Test
-    @Situations({
-            @Situation(StubId = "AddCalculatorStub_add_normal_withArgs", Class = "beanId:addCalculatorImpl",
-                    Method = "name:add;paramType:int,int"),
-            @Situation(StubId = "SubstractCalculatorStub_sub_normal_noArgs",
-                    Class = "substractCalculator",
-                    Method = "sub")
-    })
-    public void test_add2() {
-        int expect1 = 200;
-        int expect2 = 100;
-        int addActual = calculateInterface.add(10, 10);
-        int subActual = calculateInterface.substract(10, 10);
-        Assert.assertEquals(addActual, expect2);
-        Assert.assertEquals(subActual, expect1);
-    }
-
-    @Test
-    @Situations({
-            @Situation(StubId = "AddCalculatorStub_add_normal_withArgs",
-                    Class = "beanId:addCalculatorImpl",
-                    Method = "name:add"),
-            @Situation(StubId = "SubstractCalculatorStub_sub_normal_withArgs",
-                    Class = "substractCalculator",
-                    Method = "sub")
-    })
-    public void test_add3() {
-        int expect1 = 100;
-        int expect2 = 100;
-        int addActual = calculateInterface.add(10, 10);
-        int subActual = calculateInterface.substract(10, 10);
-        Assert.assertEquals(addActual, expect1);
-        Assert.assertEquals(subActual, expect2);
-    }
+    // /**
+    // * 测试case2
+    // */
+    // @Test
+    // @Situations({
+    // @Situation(StubId = "AddCalculatorStub_add_normal_withArgs", Class = "beanId:addCalculatorImpl",
+    // Method = "name:add;paramType:int,int"),
+    // @Situation(StubId = "SubstractCalculatorStub_sub_normal_noArgs",
+    // Class = "substractCalculator",
+    // Method = "sub")
+    // })
+    // public void test_add2() {
+    // int expect1 = 200;
+    // int expect2 = 100;
+    // int addActual = calculateInterface.add(10, 10);
+    // int subActual = calculateInterface.substract(10, 10);
+    // Assert.assertEquals(addActual, expect2);
+    // Assert.assertEquals(subActual, expect1);
+    // }
+    //
+    // @Test
+    // @Situations({
+    // @Situation(StubId = "AddCalculatorStub_add_normal_withArgs",
+    // Class = "beanId:addCalculatorImpl",
+    // Method = "name:add"),
+    // @Situation(StubId = "SubstractCalculatorStub_sub_normal_withArgs",
+    // Class = "substractCalculator",
+    // Method = "sub")
+    // })
+    // public void test_add3() {
+    // int expect1 = 100;
+    // int expect2 = 100;
+    // int addActual = calculateInterface.add(10, 10);
+    // int subActual = calculateInterface.substract(10, 10);
+    // Assert.assertEquals(addActual, expect1);
+    // Assert.assertEquals(subActual, expect2);
+    // }
 
 }

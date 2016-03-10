@@ -4,6 +4,8 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
 
 import com.dingding.milou.stub.Stub;
@@ -16,6 +18,8 @@ import com.dingding.milou.stub.StubInfo;
  * 
  */
 public class StubInfoScanner {
+
+    private static Logger logger = LoggerFactory.getLogger(StubInfoScanner.class);
 
     private StubInfoScanner() {
 
@@ -58,6 +62,7 @@ public class StubInfoScanner {
                 info.setStubId(stubId);
                 info.setStubClass(cls);
                 info.setStubMethod(method);
+                logger.debug("stubId = {}", stubId);
                 map.put(stubId, info);
             }
         }
