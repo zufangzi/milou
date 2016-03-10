@@ -16,7 +16,7 @@ import com.dingding.milou.stub.StubLocation;
 @ContextConfiguration(locations = { "classpath:ctx-test.xml" })
 @StubLocation("com.dingding.calculate.stub")
 // 指定stub类的仓库位置
-public class CalculateImplTest extends StubRepo {
+public class CalculateImplTest2 extends StubRepo {
 
     @Autowired
     private Calculate calculateInterface;
